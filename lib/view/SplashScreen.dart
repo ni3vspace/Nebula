@@ -16,7 +16,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
-    Future.delayed(const Duration(hours: 4), () async {
+    Future.delayed(const Duration(seconds: 4), () async {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => LoginPage()));
     });
@@ -31,9 +31,9 @@ class _SplashScreenState extends State<SplashScreen> {
           Positioned(
               top: 0,
               left: 0,
-              child: SvgPicture.asset(
-                "assets/images/splash.svg",
-                fit : BoxFit.none,
+              child: Image.asset(
+                "assets/png_image/SPLASH_SCREEN.png",
+                fit : BoxFit.fill,
               )
               // child: SvgPicture.asset(
               //   "assets/images/splash.svg",
