@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.7.10'
+    ext.kotlin_version = '1.8.10'
     repositories {
         google()
         mavenCentral()
@@ -8,6 +8,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:7.2.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.google.gms:google-services:4.3.10'  // Google Services plugin
     }
 }
 
@@ -29,3 +30,8 @@ subprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+//tasks.whenTaskAdded { task ->
+//    if (task.name.startsWith("map") && task.name.endsWith("SourceSetPaths")) {
+//        task.dependsOn("processDebugGoogleServices")
+//    }
+//}
