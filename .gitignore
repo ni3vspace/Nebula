@@ -8,6 +8,7 @@ local.properties
 # Log/OS Files
 *.log
 ios/Podfile
+android/app/build
 
 # Android Studio generated files and folders
 captures/
