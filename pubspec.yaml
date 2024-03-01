@@ -36,7 +36,17 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   flutter_svg:
+  get:
+  get_storage:
+  flutter_local_notifications:
+  firebase_core:
+  intl:
+  firebase_messaging:
+  shared_preferences:
   sliding_up_panel: ^2.0.0+1
+  fluttertoast: ^8.2.4
+  camera:
+  path_provider:
 
 dev_dependencies:
   flutter_test:
@@ -64,6 +74,7 @@ flutter:
   assets:
     - assets/images/
     - assets/png_image/
+    - assets/icons/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
