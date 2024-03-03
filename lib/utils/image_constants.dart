@@ -15,6 +15,7 @@ class ImageConstants{
   static String apple_logo = "assets/icons/Apple_logo.svg";
   static String facebook_logo = "assets/icons/facebook_logo.svg";
   static String check_mark = "assets/icons/Check_mark.svg";
+  static String close = "assets/icons/Close.svg";
 
 
   //image

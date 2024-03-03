@@ -6,7 +6,10 @@ class ColorConstants{
   static Color presentaion = hexToColor('#7DA1FF');
 
 
-  static Color camItemsBack = Color(0xFF555555).withOpacity(0.5);
+
+  static Color camItemsBack = Color(int.parse('0x55555555'));
+  static Color camItemsBack1 = Color(int.parse('0x50000000'));
+  // static Color camItemsBack = Color(0xFF555555).withOpacity(0.5);
   static Color presentaionDisable = presentaion.withOpacity(0.5);
 
 }

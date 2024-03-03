@@ -10,4 +10,6 @@ class Strings {
 
   static String nebula = "Nebula";
   static String baseUrl = "Nebula";
+  static String reminder = "Reminder";
+  static String make_reminder = "Make a reminder";
 }

@@ -7,8 +7,11 @@ import 'package:get/get.dart';
 import 'package:nebula/utils/global_utils.dart';
 import 'package:nebula/utils/image_constants.dart';
 import 'package:nebula/utils/log_utils.dart';
+import 'package:nebula/utils/widgets/rounded_buttons.dart';
 
 import '../../utils/color_constants.dart';
+import '../../utils/strings.dart';
+import '../../utils/widgets/circle_ring_icon.dart';
 import '../../utils/widgets/circler_widget.dart';
 import 'home_controller.dart';
 
@@ -63,7 +66,7 @@ class HomeScreen extends StatelessWidget {
                   ClipRRect(
                       borderRadius: BorderRadius.circular(18.0),
                       child:controller.lastImageFileName.value !=null
-                          ?Image.file(controller.lastImageFileName.value!):_cameraView(controller,aspectRatio)
+                          ?_previewWidget(controller,size):_cameraView(controller,aspectRatio)
                   ):Container()),
                 ),
 
@@ -91,8 +94,7 @@ class HomeScreen extends StatelessWidget {
                         ),
                         GestureDetector(
                           onTap: (){
-                            controller.lastImageFileName.value=null;
-                            controller.controller.setDescription(controller.cameras[controller.flipCamera.value]);
+                            _callOpenCamera(controller);
                             // controller.onNewCameraSelected(controller.cameras[controller.flipCamera.value]);
 
                           },
@@ -212,7 +214,7 @@ class HomeScreen extends StatelessWidget {
                       padding: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(60.0),
-                        color: Color(int.parse('0x55555555')),
+                        color: ColorConstants.camItemsBack,
 
                       ),
                       child: Column(
@@ -262,7 +264,7 @@ class HomeScreen extends StatelessWidget {
                       padding: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(60.0),
-                        color: Color(int.parse('0x55555555')),
+                        color: ColorConstants.camItemsBack,
 
                       ),
                       child: Container(
@@ -301,27 +303,50 @@ class HomeScreen extends StatelessWidget {
     return TextStyle(color: Colors.white,fontSize: 14);
   }
 
-}
-
-class CircleRingIcon extends StatelessWidget {
-  final double size;
-  final Color borderColor;
-
-  CircleRingIcon({this.size = 48.0, this.borderColor = Colors.white});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        border: Border.all(
-          color: borderColor,
-          width: 5.0, // Adjust the width as needed
+  _previewWidget(HomeController controller, Size size) {
+    return Stack(
+      children: [
+        Container(
+          child: Image.file(controller.lastImageFileName.value!),
         ),
-        color: Colors.transparent,
-      ),
+        Positioned(
+            top: 10,
+            left: 10,
+            right: 10,
+            child: Row(
+              children: [
+                GestureDetector(
+                    onTap: (){
+                      _callOpenCamera(controller);
+                    },
+                    child: CircleWithIconWidget(assetName: ImageConstants.close,fillColor: ColorConstants.camItemsBack,height: 30,width: 30,)),
+                Expanded(
+                  child: Text(Strings.reminder.toUpperCase(),
+                    style: TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.w700),
+                    textAlign: TextAlign.center,
+                  )
+                )
+              ],
+            )),
+
+        Positioned(
+            bottom: 20,
+            left: 80,
+            right: 80,
+            child:Container(
+              child: RoundedButton(text: Strings.make_reminder.toUpperCase(),
+                color: ColorConstants.camItemsBack1,textColor:Colors.white,
+                onPressed: () {  },),
+            ) )
+      ],
     );
   }
+
+  void _callOpenCamera(HomeController controller) {
+    controller.lastImageFileName.value=null;
+    controller.controller.setDescription(controller.cameras[controller.flipCamera.value]);
+  }
+
 }
+
+
