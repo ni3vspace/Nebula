@@ -25,7 +25,7 @@ import 'utils/log_utils.dart';
 Future<void> main() async {
   await runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
-    // await Firebase.initializeApp();
+    await Firebase.initializeApp();
     // FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
     // await GlobalUtils().init();
     // await GetStorage.init("chatContainer");

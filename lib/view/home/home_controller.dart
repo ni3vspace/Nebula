@@ -32,13 +32,15 @@ class HomeController extends GetxController{
         controller.setFlashMode(currentFlashMode.value!);
         // currentFlashMode.value = controller.value.flashMode;
       }).catchError((Object e) {
+        LogUtils.error('error'+e.toString());
         if (e is CameraException) {
           LogUtils.error('camera error'+e.toString());
           camError.value=e.code;
           switch (e.code) {
             case 'CameraAccessDenied':
-
-              LogUtils.error("CameraAccessDenied");
+              if(e.description!=null)
+                Fluttertoast.showToast(msg: e.description!);
+              LogUtils.error(e.description.toString());
               break;
             default:
             // Handle other errors here.

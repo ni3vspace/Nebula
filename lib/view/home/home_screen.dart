@@ -9,6 +9,7 @@ import 'package:nebula/utils/image_constants.dart';
 import 'package:nebula/utils/log_utils.dart';
 
 import '../../utils/color_constants.dart';
+import '../../utils/widgets/circler_widget.dart';
 import 'home_controller.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -151,7 +152,7 @@ class HomeScreen extends StatelessWidget {
 
                 DragTarget(
                     builder: (BuildContext context, List<Object?> candidateData, List<dynamic> rejectedData) {
-                      return CircleRingIcon(size: 55,);
+                      return CircleRingIcon(size: 60,);
                     },
                     onWillAccept: (data) => data == 'capture',
                     onAccept: (data) {
@@ -248,17 +249,11 @@ class HomeScreen extends StatelessWidget {
       maintainSize: true,
       maintainAnimation: true,
       // maintainSize:true,
-      child: Container(
-        height: 45,width: 45,
-        padding: EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: type=="PRESENTSTION"?ColorConstants.presentaionDisable:ColorConstants.pinOnCamera,
-        ),
-        child: Opacity(
-            opacity: type=="PRESENTSTION"?0.5:1,
-            child: SvgPicture.asset(type=="PRESENTSTION"?ImageConstants.presentaionIcon:ImageConstants.pinIcon)),
-      ),
+      child: CircleWithIconWidget(assetName: type=="PRESENTSTION"?ImageConstants.presentaionIcon:ImageConstants.pinIcon,
+      fillColor: type=="PRESENTSTION"?ColorConstants.presentaionDisable:ColorConstants.pinOnCamera,
+        opacity: type=="PRESENTSTION"?0.5:1,
+      )
+
     );
   }
 

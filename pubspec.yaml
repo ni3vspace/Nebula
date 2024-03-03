@@ -45,6 +45,7 @@ dependencies:
   shared_preferences:
   sliding_up_panel: ^2.0.0+1
   fluttertoast: ^8.2.4
+  google_sign_in:
   camera:
   path_provider:
 

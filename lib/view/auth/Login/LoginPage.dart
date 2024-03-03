@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:nebula/utils/image_constants.dart';
+import 'package:nebula/view/auth/Login/LoginController.dart';
 
 import '../../../routes/app_pages.dart';
 import '../../../utils/widgets/rounded_buttons.dart';
@@ -12,7 +13,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
+    final LoginController controller = Get.find();
     return Scaffold(
       backgroundColor: Constants.bgColor,
       body: Stack(
@@ -41,7 +42,7 @@ class LoginPage extends StatelessWidget {
           Positioned(
             bottom: 0, // Position at the bottom
             left: 0,
-            child: YourBottomContainer(), // Your container at the bottom
+            child: YourBottomContainer(controller), // Your container at the bottom
           ),
         ],
       ),
@@ -50,6 +51,9 @@ class LoginPage extends StatelessWidget {
 }
 
 class YourBottomContainer extends StatelessWidget {
+  LoginController controller;
+  YourBottomContainer(this.controller);
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -59,7 +63,10 @@ class YourBottomContainer extends StatelessWidget {
       // height: 100, // Adjust the height as needed
       // color: Colors.blue, // Example color
       alignment: Alignment.center,
-      child: Column(
+      child: Obx(()=>controller.isLoading.value?
+      CircularProgressIndicator():
+      controller.isLoggedIn.value?LoginSuccess(userMail: controller.userMail,):
+      Column(
         children: [
           Container(
             padding: EdgeInsets.only(bottom: 10),
@@ -74,8 +81,9 @@ class YourBottomContainer extends StatelessWidget {
           ),
           Container(
               margin: EdgeInsets.symmetric(horizontal:20,vertical: 8 ),
-              child: RoundedButton(imageName:ImageConstants.google_logo,text: 'CONTINUE WITH GOOGLE', onPressed: () {
-                Get.offNamed(Routes.home);
+              child: RoundedButton(imageName:ImageConstants.google_logo,text: 'CONTINUE WITH GOOGLE', onPressed: () async {
+                await controller.googleSignOut();
+                controller.googleSignIn();
               },)),
           Container(
               margin: EdgeInsets.symmetric(horizontal:20,),
@@ -90,7 +98,7 @@ class YourBottomContainer extends StatelessWidget {
 
 
         ],
-      ),
+      )),
     );
   }
 }
