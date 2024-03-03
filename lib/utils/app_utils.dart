@@ -8,7 +8,6 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart' as intl;
-import 'package:mime/mime.dart';
 import 'package:nebula/utils/strings.dart';
 import 'package:nebula/utils/user_pref.dart';
 import 'package:http/http.dart' as http;
@@ -180,9 +179,4 @@ class AppUtils {
       return ApiResponse.error(1, "Error Occurred : ${e.toString()}");
     }
   }
-
-  String getMimeType() {
-    return lookupMimeType(this as String).toString();
-  }
-
 }
