@@ -6,12 +6,14 @@ class LogUtils {
   @pragma("vm:prefer-inline")
   static Future<void> error(dynamic e, {StackTrace? s}) async {
     if (kDebugMode) {
+      log("**********Error********");
       log(e.toString());
     }
   }
 
   static Future<void> debugLog(dynamic e) async {
     if (kDebugMode) {
+      log("**********Debug********");
       log(e.toString());
     }
   }

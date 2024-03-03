@@ -336,7 +336,7 @@ class HomeScreen extends StatelessWidget {
             child:Container(
               child: RoundedButton(text: Strings.make_reminder.toUpperCase(),
                 color: ColorConstants.camItemsBack1,textColor:Colors.white,
-                onPressed: () {  },),
+                onPressed: () {controller.callReminderApi(); },),
             ) )
       ],
     );

@@ -5,13 +5,22 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:nebula/api/repository/reminder_repo.dart';
+import 'package:nebula/models/reminder_model.dart';
 import 'package:nebula/utils/global_utils.dart';
 import 'package:nebula/utils/log_utils.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../../api/responses/api_response.dart';
+import '../../utils/app_utils.dart';
 import '../../utils/strings.dart';
+import '../../utils/widgets/common_widgets.dart';
+import 'package:path/path.dart' as path;
 
 class HomeController extends GetxController{
+  ReminderRepo reminderRepo;
+  HomeController(
+      {required this.reminderRepo});
 
   late List<CameraDescription> cameras;
   late CameraController controller;
@@ -107,48 +116,39 @@ class HomeController extends GetxController{
     super.dispose();
   }
 
-  void onNewCameraSelected(CameraDescription cameraDescription) async {
-    final previousCameraController = controller;
-    // Instantiating the camera controller
-    final CameraController cameraController = CameraController(
-      cameraDescription,
-      ResolutionPreset.high,
-      imageFormatGroup: ImageFormatGroup.jpeg,
-       enableAudio: false
-    );
-
-    // Dispose the previous controller
-    camInitialize.value=false;
-    await previousCameraController?.dispose();
-
-    // Replace with the new controller
-    controller = cameraController;
-
-    // Update UI if controller updated
-    cameraController.addListener(() {
-      camInitialize.value=true;
-      controller.setFlashMode(currentFlashMode.value!);
-    });
-
-    // Initialize controller
+  void callReminderApi() async {
+    showLoadingDialog();
     try {
-      await cameraController.initialize();
-    } on CameraException catch (e) {
-      print('Error initializing camera: $e');
-      LogUtils.error('camera error'+e.toString());
-      camError.value=e.code;
-      switch (e.code) {
-        case 'CameraAccessDenied':
+      String fileName="",filePath="";
+      if(lastImageFileName.value!=null)
+        {
+          // Get the file path
+          filePath = lastImageFileName.value!.path;
+          // Get the file name
+          fileName = path.basename(filePath);
+          print('File Name: $fileName');
 
-          LogUtils.error("CameraAccessDenied");
+          print('File Path: $filePath');
+        }
+      ApiResponse response=await AppUtils.uploadDocument(fileName, filePath);
+
+      switch (response.status) {
+        case Status.SUCCESS:
+          var validationResponse =
+          Reminders.fromJson(response.data);
+          LogUtils.debugLog(validationResponse.toString());
+
           break;
-        default:
-        // Handle other errors here.
+        case Status.ERROR:
+          AppUtils.getToast(message: "Error", isError: true);
+          // AppUtils.handleApiError(response);
+          Navigator.pop(Get.overlayContext!);
           break;
       }
+    } catch (e) {
+      Navigator.pop(Get.overlayContext!);
+      AppUtils.getToast(message: e.toString(), isError: true);
     }
-    // Update the Boolean
-    camInitialize.value = controller!.value.isInitialized;
   }
 
 

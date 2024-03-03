@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:nebula/utils/strings.dart';
+import 'package:nebula/utils/user_pref.dart';
 
 import '../utils/app_utils.dart';
 
@@ -11,17 +12,19 @@ class ApiProvider extends GetConnect {
   @override
   bool get allowAutoSignedCert => true;
 
+  String userName="";
 
   @override
   Future<void> onInit() async {
     httpClient.baseUrl = Strings.baseUrl;
-
-
+    userName = await UserPref.userName;
     httpClient.timeout = const Duration(seconds: 60);
     httpClient.maxAuthRetries = 3;
 
     httpClient.addRequestModifier<void>((request) async {
       request.headers['Content-type'] = "application/json";
+      request.headers['x-api-key'] = Strings.api_key;
+      request.headers['userName'] = userName;
       //request.headers['Accept'] = "text/plain";
       // request.headers['Authorization'] = "Bearer ${await UserPref.jwtToken}";
       return request;
