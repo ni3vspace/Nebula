@@ -169,73 +169,113 @@ class HomeScreen extends StatelessWidget {
         Positioned(
             top: 20,
             right: 15,
-            child: Column(
+            child: Row(
               children: [
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(60.0),
-                    color: Color(int.parse('0x55555555')),
-
-                  ),
+                AnimatedOpacity(
+                  opacity: controller.cameraMenuVisible.value ? 1.0 : 0.0,
+                  duration: Duration(milliseconds: 500), // Adjust the duration as needed
+                  curve: Curves.easeInOut,
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        padding:EdgeInsets.only(top: 10),
-                        child: GestureDetector(
-                          onTap: (){
-                            LogUtils.debugLog("clicked flip");
-                            controller.flipCamera.value=controller.flipCamera.value==0?1:0;
-                            controller.controller.setDescription(controller.cameras[controller.flipCamera.value]);
-                            // controller.onNewCameraSelected(controller.cameras[controller.flipCamera.value]);
-                          },
-                          child: SvgPicture.asset(ImageConstants.flip),
-                        ),
-                      ),
-                      Container(
-                        padding:EdgeInsets.only(top: 10),
-                        child: Obx(()=> GestureDetector(
-                            onTap: (){
-
-                              controller.currentFlashMode.value==FlashMode.off?
-                              controller.currentFlashMode.value=FlashMode.always
-                                  : controller.currentFlashMode.value=FlashMode.off;
-                              controller.controller.setFlashMode(controller.currentFlashMode.value!);
-                              LogUtils.debugLog("currentFlashMode=="+controller.currentFlashMode.value.toString());
-                              // controller.onNewCameraSelected(controller.cameras[controller.flipCamera.value]);
-
-                            },
-                            child: SvgPicture.asset(controller.currentFlashMode.value==FlashMode.always?ImageConstants.flash_on:ImageConstants.flash_off),
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: 5),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Container(
+                            // padding:EdgeInsets.only(top: 5),
+                            child: Text("Flip",style: textStyleForMenu()),
                           ),
-                        ),
+                          Container(
+                            padding:EdgeInsets.only(top: 20),
+                            child:  Text("Flash Off ",style: textStyleForMenu()),
+                          ),
+                          Container(
+                            padding:EdgeInsets.only(top: 15),
+                            child:  Text("Import Media",style: textStyleForMenu()),
+                          ),
+
+                        ],),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 30,right: 7),
+                      child: Text("Feedback",style: textStyleForMenu()),
+                    )
+                  ],
+              ),
+                ),
+                Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(60.0),
+                        color: Color(int.parse('0x55555555')),
+
                       ),
-                      Container(
-                        padding:EdgeInsets.only(top: 10,bottom: 10),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            padding:EdgeInsets.only(top: 10),
+                            child: GestureDetector(
+                              onTap: (){
+                                LogUtils.debugLog("clicked flip");
+                                controller.flipCamera.value=controller.flipCamera.value==0?1:0;
+                                controller.controller.setDescription(controller.cameras[controller.flipCamera.value]);
+                                // controller.onNewCameraSelected(controller.cameras[controller.flipCamera.value]);
+                              },
+                              child: SvgPicture.asset(ImageConstants.flip),
+                            ),
+                          ),
+                          Container(
+                            padding:EdgeInsets.only(top: 10),
+                            child: Obx(()=> GestureDetector(
+                                onTap: (){
+
+                                  controller.currentFlashMode.value==FlashMode.off?
+                                  controller.currentFlashMode.value=FlashMode.always
+                                      : controller.currentFlashMode.value=FlashMode.off;
+                                  controller.controller.setFlashMode(controller.currentFlashMode.value!);
+                                  LogUtils.debugLog("currentFlashMode=="+controller.currentFlashMode.value.toString());
+                                  // controller.onNewCameraSelected(controller.cameras[controller.flipCamera.value]);
+
+                                },
+                                child: SvgPicture.asset(controller.currentFlashMode.value==FlashMode.always?ImageConstants.flash_on:ImageConstants.flash_off),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            padding:EdgeInsets.only(top: 10,bottom: 10),
+                            child: GestureDetector(
+                              onTap: (){},
+                              child: SvgPicture.asset(ImageConstants.import),
+                            ),
+                          ),
+
+                      ],),
+                    ),
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: 10,),
+                      padding: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(60.0),
+                        color: Color(int.parse('0x55555555')),
+
+                      ),
+                      child: Container(
+                        padding:EdgeInsets.all(5),
                         child: GestureDetector(
                           onTap: (){},
-                          child: SvgPicture.asset(ImageConstants.import),
+                          child: SvgPicture.asset(ImageConstants.feedback),
                         ),
                       ),
-
-                  ],),
+                    )
+                  ],
                 ),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 10,),
-                  padding: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(60.0),
-                    color: Color(int.parse('0x55555555')),
 
-                  ),
-                  child: Container(
-                    padding:EdgeInsets.all(5),
-                    child: GestureDetector(
-                      onTap: (){},
-                      child: SvgPicture.asset(ImageConstants.feedback),
-                    ),
-                  ),
-                )
               ],
             ))
       ],
@@ -257,6 +297,9 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
+  TextStyle textStyleForMenu(){
+    return TextStyle(color: Colors.white,fontSize: 14);
+  }
 
 }
 

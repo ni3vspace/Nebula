@@ -19,6 +19,7 @@ class HomeController extends GetxController{
   Rx<File?> lastImageFileName= Rx(null);
   Rx<FlashMode?> currentFlashMode= Rx(FlashMode.off);
   Rx<int> flipCamera= Rx(CamerasEnum.BACK_CAMERA.getCameraVal());
+  Rx<bool> cameraMenuVisible= Rx(false);
 
   var camError="".obs;
   @override
@@ -29,7 +30,11 @@ class HomeController extends GetxController{
       controller = CameraController(cameras[flipCamera.value], ResolutionPreset.max,enableAudio: false);
       controller.initialize().then((_) {
         camInitialize.value=true;
+        cameraMenuVisible.value=true;
         controller.setFlashMode(currentFlashMode.value!);
+        Future.delayed(Duration(seconds: 4),(){
+          cameraMenuVisible.value=false;
+        });
         // currentFlashMode.value = controller.value.flashMode;
       }).catchError((Object e) {
         LogUtils.error('error'+e.toString());
