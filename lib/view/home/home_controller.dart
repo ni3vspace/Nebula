@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -11,7 +12,7 @@ import 'package:nebula/models/reminder_model.dart';
 import 'package:nebula/utils/global_utils.dart';
 import 'package:nebula/utils/log_utils.dart';
 import 'package:path_provider/path_provider.dart';
-
+import 'package:timezone/timezone.dart';
 import '../../api/responses/api_response.dart';
 import '../../utils/app_utils.dart';
 import '../../utils/strings.dart';
@@ -30,12 +31,14 @@ class HomeController extends GetxController{
   Rx<FlashMode?> currentFlashMode= Rx(FlashMode.off);
   Rx<int> flipCamera= Rx(CamerasEnum.BACK_CAMERA.getCameraVal());
   Rx<bool> cameraMenuVisible= Rx(false);
-
+  DeviceCalendarPlugin deviceCalendarPlugin = DeviceCalendarPlugin();
   var camError="".obs;
+  String? calenderId;
   @override
   void onInit() {
     super.onInit();
     WidgetsBinding.instance.addPostFrameCallback((duration) async {
+      getCalenderIdCreate();
       cameras = await availableCameras();
       controller = CameraController(cameras[flipCamera.value], ResolutionPreset.max,enableAudio: false);
       controller.initialize().then((_) {
@@ -138,6 +141,10 @@ class HomeController extends GetxController{
           List<dynamic> responseData = json.decode(response.data);
           List<Reminders> remindersList = responseData.map((json) => Reminders.fromJson(json)).toList();
           LogUtils.debugLog(remindersList.first.toJson().toString());
+
+          if(remindersList.isNotEmpty){
+            var result=await addEventToCalendar(remindersList[0]);
+          }
           Navigator.pop(Get.overlayContext!);
           break;
         case Status.ERROR:
@@ -154,5 +161,95 @@ class HomeController extends GetxController{
     }
   }
 
+  Future<bool> addEventToCalendar(Reminders reminder) async {
+    final Result permissionStatus = await deviceCalendarPlugin.requestPermissions();
+    if(permissionStatus.hasErrors){
+      AppUtils.getToast(message: permissionStatus.errors.first.errorMessage);
+      return false;
+    }
+
+    final event =  Event(calenderId,
+      eventId: reminder.id,
+      title: reminder.name,
+      description: reminder.description,
+      start: _getTzdateTime(reminder.startDate),
+      end: _getTzdateTime(reminder.endDate),
+      url: Uri.parse(reminder.imageUrl ?? ""),
+      location: reminder.location,
+    );
+
+    LogUtils.debugLog(event.toJson().toString());
+    final Result<String>? result = await deviceCalendarPlugin.createOrUpdateEvent(event);
+
+    if(result!=null){
+      if(result.hasErrors){
+        LogUtils.error(result.errors.first.errorMessage);
+        AppUtils.getToast(message: result.errors.first.errorMessage);
+      }else{
+        AppUtils.getToast(message: Strings.addedCalender);
+        return true;
+      }
+    }
+    return false;
+
+    // Continue with adding the event
+  }
+
+  _getTzdateTime(String? date) {
+    if(date==null){
+      return null;
+    }
+
+    DateTime dateTime=DateTime.parse(date);
+    LogUtils.debugLog(dateTime.toString());
+
+// Convert to TZDateTime for a specific time zone (e.g., 'Asia/Kolkata')
+    TZDateTime tzDateTime = TZDateTime.from(dateTime, getLocation('Asia/Kolkata'));
+
+// Print the time zone aware TZDateTime object
+    print(tzDateTime);
+    return tzDateTime;
+  }
+
+  deleteCalender() async {
+    var a = await deviceCalendarPlugin.retrieveCalendars();
+    if(a.isSuccess){
+      a.data?.forEach((element) async {
+        LogUtils.debugLog("id=${element.id} name ${element.name}");
+        if(element.name=="Nebula Reminder"){
+          var a1 = await deviceCalendarPlugin.deleteCalendar(element.id!);
+
+          if(a1.isSuccess){
+            LogUtils.error("a1=="+a1.data.toString());
+          }
+          if (a1.hasErrors){
+            LogUtils.error("a1=="+a1.errors.first.errorMessage);
+          }
+        }
+      });
+
+
+    }if (a.hasErrors){
+      LogUtils.error(a.errors.first.errorMessage);
+    }
+  }
+
+  getCalenderIdCreate() async {
+
+    var a = await deviceCalendarPlugin.retrieveCalendars();
+    if(a.isSuccess){
+      Calendar? cal=a.data?.firstWhere((element) => element.name == Strings.nebula);
+      calenderId=cal?.id;
+      if(calenderId==null){
+        Result<String> calender = await deviceCalendarPlugin.createCalendar(Strings.nebula);
+        if(calender.isSuccess){
+          calenderId=calender.data;
+        }
+      }
+    }
+    if (a.hasErrors){
+      LogUtils.error(a.errors.first.errorMessage);
+    }
+  }
 
 }

@@ -51,6 +51,7 @@ dependencies:
   http:
   permission_handler:
   image_picker:
+  device_calendar: ^4.3.2
 
 dev_dependencies:
   flutter_test:

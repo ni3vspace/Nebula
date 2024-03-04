@@ -30,6 +30,11 @@ class GlobalUtils {
 
   }
 
+  static Future<XFile?> pickImage() async {
+    final XFile? image = await ImagePicker()
+        .pickImage(source: ImageSource.gallery);
+    return image;
+  }
 }
 
 

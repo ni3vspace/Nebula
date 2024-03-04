@@ -1,6 +1,7 @@
 class Reminders {
   String? id;
   String? name;
+  String? description;
   String? userName;
   String? location;
   String? imageUrl;
@@ -19,6 +20,7 @@ class Reminders {
   Reminders.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
+    description = json['description'];
     userName = json['userName'];
     location = json['location'];
     imageUrl = json['imageUrl'];
@@ -30,6 +32,7 @@ class Reminders {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['name'] = this.name;
+    data['description'] = this.description;
     data['userName'] = this.userName;
     data['location'] = this.location;
     data['imageUrl'] = this.imageUrl;
