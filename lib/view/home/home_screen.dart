@@ -8,6 +8,7 @@ import 'package:nebula/utils/global_utils.dart';
 import 'package:nebula/utils/image_constants.dart';
 import 'package:nebula/utils/log_utils.dart';
 import 'package:nebula/utils/widgets/rounded_buttons.dart';
+import 'package:nebula/view/home/import_media/import_media_screen.dart';
 
 import '../../utils/color_constants.dart';
 import '../../utils/strings.dart';
@@ -66,7 +67,7 @@ class HomeScreen extends StatelessWidget {
                   ClipRRect(
                       borderRadius: BorderRadius.circular(18.0),
                       child:controller.lastImageFileName.value !=null
-                          ?_previewWidget(controller,size):_cameraView(controller,aspectRatio)
+                          ?_previewWidget(controller,size):_cameraView(controller,aspectRatio,size)
                   ):Container()),
                 ),
 
@@ -125,7 +126,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  _cameraView(HomeController controller, double aspectRatio) {
+  _cameraView(HomeController controller, double aspectRatio,size) {
     return Stack(
       children: [
         AspectRatio(aspectRatio:aspectRatio,child: CameraPreview(controller.controller)),
@@ -252,7 +253,12 @@ class HomeScreen extends StatelessWidget {
                           Container(
                             padding:EdgeInsets.only(top: 10,bottom: 10),
                             child: GestureDetector(
-                              onTap: (){},
+                              onTap: (){
+                                Get.bottomSheet(
+                                  ImportMediaScreen(size: size,),
+
+                                );
+                              },
                               child: SvgPicture.asset(ImageConstants.import),
                             ),
                           ),

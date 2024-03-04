@@ -4,6 +4,7 @@ class ColorConstants{
   static Color bottomBorder = hexToColor('#BCA0F5');
   static Color pinOnCamera = hexToColor('#CAB4FF');
   static Color presentaion = hexToColor('#7DA1FF');
+  static Color back_black = hexToColor('#181818');
 
 
 
