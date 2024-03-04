@@ -39,7 +39,7 @@ class HomeController extends GetxController{
   void onInit() {
     super.onInit();
     WidgetsBinding.instance.addPostFrameCallback((duration) async {
-      getCalenderIdCreate();
+      await getCalenderIdCreate();
       cameras = await availableCameras();
       controller = CameraController(cameras[flipCamera.value], ResolutionPreset.max,enableAudio: false);
       controller.initialize().then((_) {
