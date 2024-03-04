@@ -50,6 +50,6 @@
 	<key>NSCameraUsageDescription</key>
     <string>your usage description here</string>
     <key>NSPhotoLibraryUsageDescription</key>
-    <string>Example usage description</string>
+    <string>Use for Reminder</string>
 </dict>
 </plist>

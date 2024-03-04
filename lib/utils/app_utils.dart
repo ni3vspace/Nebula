@@ -147,26 +147,28 @@ class AppUtils {
       String filename, String filePath) async {
     try {
       String userName=await UserPref.userName;
-      Uri url = Uri.parse(Strings.baseUrl);
-      http.MultipartRequest request = http.MultipartRequest('PUT', url);
+      Uri url = Uri.parse(Strings.baseUrl+"/Prod/event/process");
+      http.MultipartRequest request = http.MultipartRequest('POST', url);
 
       request.headers['Content-type'] = "application/json";
       request.headers['x-api-key'] = Strings.api_key;
-      request.headers['userName'] = "userName";
+      request.headers['userName'] = userName;
 
       request.fields['filename'] = filename;
+      request.fields['mimetype'] = "image/jpeg";
       Uint8List fileBytes = await File(filePath).readAsBytes();
-      request.files.add(http.MultipartFile.fromBytes('files', fileBytes,
+      request.files.add(http.MultipartFile.fromBytes('file', fileBytes,
           filename: filename));
 
       http.StreamedResponse response = await request.send();
 
       log("${request.headers}");
-      log("${request.method} ${request.url}");
+      log("${request.fields} \n${request.method} ${request.url}");
+
       log("Status:${response.statusCode}\n Response: ${response.stream.toString()}");
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         String responseBody = await response.stream.bytesToString();
-        return ApiResponse.success(200, responseBody);
+        return ApiResponse.success(201, responseBody);
       } else {
         String errorBody = await response.stream.bytesToString();
         LogUtils.error(errorBody);

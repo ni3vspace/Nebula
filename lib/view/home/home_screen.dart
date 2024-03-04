@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +10,6 @@ import 'package:nebula/utils/global_utils.dart';
 import 'package:nebula/utils/image_constants.dart';
 import 'package:nebula/utils/log_utils.dart';
 import 'package:nebula/utils/widgets/rounded_buttons.dart';
-import 'package:nebula/view/home/import_media/import_media_screen.dart';
-
 import '../../utils/color_constants.dart';
 import '../../utils/strings.dart';
 import '../../utils/widgets/circle_ring_icon.dart';
@@ -67,7 +67,7 @@ class HomeScreen extends StatelessWidget {
                   ClipRRect(
                       borderRadius: BorderRadius.circular(18.0),
                       child:controller.lastImageFileName.value !=null
-                          ?_previewWidget(controller,size):_cameraView(controller,aspectRatio,size)
+                          ?_previewWidget(controller,size):_cameraView(controller,aspectRatio)
                   ):Container()),
                 ),
 
@@ -126,7 +126,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  _cameraView(HomeController controller, double aspectRatio,size) {
+  _cameraView(HomeController controller, double aspectRatio) {
     return Stack(
       children: [
         AspectRatio(aspectRatio:aspectRatio,child: CameraPreview(controller.controller)),
@@ -253,11 +253,11 @@ class HomeScreen extends StatelessWidget {
                           Container(
                             padding:EdgeInsets.only(top: 10,bottom: 10),
                             child: GestureDetector(
-                              onTap: (){
-                                Get.bottomSheet(
-                                  ImportMediaScreen(size: size,),
-
-                                );
+                              onTap: () async {
+                                XFile? image= await GlobalUtils.pickImage();
+                                if(image!=null) {
+                                  controller.lastImageFileName.value=File(image.path);
+                                }
                               },
                               child: SvgPicture.asset(ImageConstants.import),
                             ),

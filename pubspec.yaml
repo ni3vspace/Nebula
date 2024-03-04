@@ -50,8 +50,7 @@ dependencies:
   path_provider:
   http:
   permission_handler:
-  photo_gallery: 2.0.0
-  transparent_image:
+  image_picker:
 
 dev_dependencies:
   flutter_test:

@@ -1,4 +1,5 @@
 
+import 'package:image_picker/image_picker.dart';
 import 'package:nebula/utils/user_pref.dart';
 
 import 'app_utils.dart';
@@ -30,6 +31,8 @@ class GlobalUtils {
   }
 
 }
+
+
 enum CamerasEnum {
   FRONT_CAMERA,//1
   BACK_CAMERA//0

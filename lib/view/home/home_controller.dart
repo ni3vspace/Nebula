@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
@@ -134,18 +135,20 @@ class HomeController extends GetxController{
 
       switch (response.status) {
         case Status.SUCCESS:
-          var validationResponse =
-          Reminders.fromJson(response.data);
-          LogUtils.debugLog(validationResponse.toString());
-
+          List<dynamic> responseData = json.decode(response.data);
+          List<Reminders> remindersList = responseData.map((json) => Reminders.fromJson(json)).toList();
+          LogUtils.debugLog(remindersList.first.toJson().toString());
+          Navigator.pop(Get.overlayContext!);
           break;
         case Status.ERROR:
-          AppUtils.getToast(message: "Error", isError: true);
-          // AppUtils.handleApiError(response);
+          // AppUtils.getToast(message: response.statusCode.toString(), isError: true);
+          LogUtils.error(response.data.toString());
+          AppUtils.handleApiError(response);
           Navigator.pop(Get.overlayContext!);
           break;
       }
     } catch (e) {
+      LogUtils.error(e);
       Navigator.pop(Get.overlayContext!);
       AppUtils.getToast(message: e.toString(), isError: true);
     }
