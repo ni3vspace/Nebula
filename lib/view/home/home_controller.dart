@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:intl/intl.dart';
 import 'package:nebula/api/repository/reminder_repo.dart';
 import 'package:nebula/models/reminder_model.dart';
 import 'package:nebula/utils/global_utils.dart';
@@ -162,16 +163,25 @@ class HomeController extends GetxController{
   }
 
   Future<bool> addEventToCalendar(Reminders reminder) async {
+    LogUtils.debugLog("CalenderId====$calenderId");
     final Result permissionStatus = await deviceCalendarPlugin.requestPermissions();
     if(permissionStatus.hasErrors){
       AppUtils.getToast(message: permissionStatus.errors.first.errorMessage);
       return false;
     }
 
+    // TZDateTime now = TZDateTime.now(local);
+    //
+    // // Add 2 minutes to the current date and time
+    // TZDateTime start = now.add(const Duration(minutes: 5));
+    // TZDateTime end = start.add(const Duration(minutes: 10));
+
     final event =  Event(calenderId,
-      eventId: reminder.id,
+      // eventId: reminder.id,
       title: reminder.name,
       description: reminder.description,
+      // start: start,
+      // end: end,
       start: _getTzdateTime(reminder.startDate),
       end: _getTzdateTime(reminder.endDate),
       url: Uri.parse(reminder.imageUrl ?? ""),
@@ -186,6 +196,7 @@ class HomeController extends GetxController{
         LogUtils.error(result.errors.first.errorMessage);
         AppUtils.getToast(message: result.errors.first.errorMessage);
       }else{
+        LogUtils.debugLog("data=${result.data}");
         AppUtils.getToast(message: Strings.addedCalender);
         return true;
       }
@@ -234,22 +245,67 @@ class HomeController extends GetxController{
     }
   }
 
+  retrieveEvents({bool isClearAll=false}) async {
+    var startDate=DateTime.now().subtract(Duration(days: 5));
+    var endDate=DateTime.now().add(Duration(days: 5));
+    LogUtils.debugLog("startDate=${startDate.toString()} endDate=${endDate.toString()}");
+    // var a = await deviceCalendarPlugin.retrieveEvents(calenderId, RetrieveEventsParams(eventIds: ["101"]));
+    var a = await deviceCalendarPlugin.retrieveEvents(calenderId, RetrieveEventsParams(startDate: startDate,endDate: endDate));
+    if(a.isSuccess){
+      a.data?.forEach((element) async {
+        LogUtils.debugLog("id=${element.eventId} calendarId=${element.calendarId} title=${element.title} name ${element.start}");
+      });
+      if(isClearAll) {
+        deviceCalendarPlugin.deleteCalendar(calenderId!);
+      }
+    }if (a.hasErrors){
+      LogUtils.error("retrieveEvents=${a.errors.first.errorMessage}");
+    }
+  }
+
   getCalenderIdCreate() async {
 
     var a = await deviceCalendarPlugin.retrieveCalendars();
     if(a.isSuccess){
-      Calendar? cal=a.data?.firstWhere((element) => element.name == Strings.nebula);
+      // a.data?.forEach((element) {
+      //   if(element.name == Strings.nebula){
+      //     calenderId=calenderId;
+      //   }
+      // });
+
+      // Calendar? cal=a.data?.firstWhere((element) => element.name == Strings.nebula);
+
+      Calendar? cal;
+      if (a.data != null && a.data!.isNotEmpty) {
+        // cal = a.data!.firstWhere((element) => element.name == Strings.nebula);
+        cal = a.data!.firstWhere((element) => element.name == Strings.nebula, orElse: () => Calendar(id: "-1"));
+        if(cal!=null && cal.id=="-1")
+          cal=null;
+      }
+
       calenderId=cal?.id;
+
       if(calenderId==null){
         Result<String> calender = await deviceCalendarPlugin.createCalendar(Strings.nebula);
         if(calender.isSuccess){
           calenderId=calender.data;
         }
       }
+      LogUtils.debugLog("CalenderId="+calenderId.toString());
     }
     if (a.hasErrors){
       LogUtils.error(a.errors.first.errorMessage);
     }
+  }
+
+  Future<void> addEventManual() async {
+    DateTime dateTime1=DateTime.now().add(Duration(minutes: 2));
+    DateTime dateTime2=dateTime1.add(Duration(minutes: 3));
+    String startDate = DateFormat("yyyy-MM-dd HH:mm:ss").format(dateTime1);
+    String endDate = DateFormat("yyyy-MM-dd HH:mm:ss").format(dateTime2);
+    LogUtils.debugLog("StartDate= $startDate Enddate=$endDate");
+    await addEventToCalendar(Reminders(id: "10001",name: "Manual added",startDate: startDate,endDate: endDate),);
+    retrieveEvents(isClearAll:false);
   }
 
 }

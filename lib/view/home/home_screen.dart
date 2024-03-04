@@ -106,7 +106,8 @@ class HomeScreen extends StatelessWidget {
                         ),
 
                         GestureDetector(
-                          onTap: (){
+                          onTap: () {
+                            // controller.addEventManual();
                           },
                           child: Padding(
                             padding: EdgeInsets.symmetric(horizontal: 20),
