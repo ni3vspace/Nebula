@@ -12,6 +12,7 @@ import 'package:nebula/api/repository/reminder_repo.dart';
 import 'package:nebula/models/reminder_model.dart';
 import 'package:nebula/utils/global_utils.dart';
 import 'package:nebula/utils/log_utils.dart';
+import 'package:nebula/view/home/add_reminder_popup_screen.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:timezone/timezone.dart';
 import '../../api/responses/api_response.dart';
@@ -144,9 +145,19 @@ class HomeController extends GetxController{
           LogUtils.debugLog(remindersList.first.toJson().toString());
 
           if(remindersList.isNotEmpty){
-            var result=await addEventToCalendar(remindersList[0]);
+            roundedDialog(AddReminderPopUpScreen(reminders: remindersList[0],onPressed: () async {
+             var result= await addEventToCalendar(remindersList[0]);
+             if(result){
+               Navigator.pop(Get.overlayContext!);
+               Get.back(closeOverlays: true);
+             }
+
+            },));
+            // var result=await addEventToCalendar(remindersList[0]);
+          }else{
+            Navigator.pop(Get.overlayContext!);
           }
-          Navigator.pop(Get.overlayContext!);
+
           break;
         case Status.ERROR:
           // AppUtils.getToast(message: response.statusCode.toString(), isError: true);
@@ -196,6 +207,7 @@ class HomeController extends GetxController{
         LogUtils.error(result.errors.first.errorMessage);
         AppUtils.getToast(message: result.errors.first.errorMessage);
       }else{
+        lastImageFileName.value=null;
         LogUtils.debugLog("data=${result.data}");
         AppUtils.getToast(message: Strings.addedCalender);
         return true;

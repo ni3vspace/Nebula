@@ -15,7 +15,14 @@ class Strings {
   static String make_reminder = "Make a reminder";
   static String noInternetConnection = "No Internet Connection";
   static String loading = "Loading...";
+  static String done = "done";
+
+  static String event = "Event";
+  static String location = "Location";
+  static String description = "Description";
+  static String timDateVenue = "TIME & DATE";
+  static String add_to_reminder = "ADD TO REMINDER";
 
   //messages
-  static String addedCalender = "Successfully event added in calender";
+  static String addedCalender = "Your reminder has been set!";
 }

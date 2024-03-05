@@ -5,11 +5,13 @@ class ColorConstants{
   static Color pinOnCamera = hexToColor('#CAB4FF');
   static Color presentaion = hexToColor('#7DA1FF');
   static Color back_black = hexToColor('#181818');
+  static Color addReminder = hexToColor('#FFE8CA');
 
 
 
   static Color camItemsBack = Color(int.parse('0x55555555'));
   static Color camItemsBack1 = Color(int.parse('0x50000000'));
+  static Color white50per = Color(int.parse('0x50FFFFFF'));
   // static Color camItemsBack = Color(0xFF555555).withOpacity(0.5);
   static Color presentaionDisable = presentaion.withOpacity(0.5);
 

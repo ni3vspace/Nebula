@@ -19,6 +19,7 @@ class ImageConstants{
 
 
   //image
+  static String success_event = "assets/images/success_event.svg";
   static String splash = "assets/images/splash.svg";
   static String splashPng =  "assets/png_image/SPLASH_SCREEN.png";
   static String logo_png =  "assets/png_image/logo_png.png";
