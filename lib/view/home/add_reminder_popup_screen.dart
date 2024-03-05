@@ -153,8 +153,8 @@ class AddReminderPopUpScreen extends StatelessWidget {
 
   Image networkImage(String? imageUrl){
     return Image.network(
-      "https://guru-ai-event-bucket.s3.amazonaws.com/upload/eventList1.jpg",
-      // imageUrl ?? "",
+      // "https://guru-ai-event-bucket.s3.amazonaws.com/upload/eventList1.jpg",
+      imageUrl ?? "",
       fit: BoxFit.fill,
       // When image is loading from the server it takes some time
       // So we will show progress indicator while loading
