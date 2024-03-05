@@ -52,6 +52,7 @@ class LoginController extends GetxController {
       }
 
     }).catchError((e) {
+      Fluttertoast.showToast(msg:e.toString(),toastLength: Toast.LENGTH_LONG);
       isLoading.value=false;
       LogUtils.error("googleSignIn catchError");
       LogUtils.error(e);
@@ -65,6 +66,10 @@ class LoginController extends GetxController {
 
       // Get.offNamed(Routes.login);
 
+    }).onError((error, stackTrace){
+      LogUtils.error("googleSignout catchError");
+      LogUtils.error(stackTrace);
+      LogUtils.error(error);
     }).catchError((e) {
       isLoading.value=false;
       LogUtils.error("googleSignout catchError");
