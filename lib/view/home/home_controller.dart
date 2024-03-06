@@ -209,7 +209,8 @@ class HomeController extends GetxController{
       }else{
         lastImageFileName.value=null;
         LogUtils.debugLog("data=${result.data}");
-        AppUtils.getToast(message: Strings.addedCalender);
+        SuccessDialogScreen(Strings.addedCalender);
+        // AppUtils.getToast(message: );
         return true;
       }
     }

@@ -108,7 +108,7 @@ class AddReminderPopUpScreen extends StatelessWidget {
           visible: reminders.startDate!=null,
           child: Container(
             padding: EdgeInsets.only(top: 10),
-            child: Text("${GlobalUtils.getDateMonthYearString(reminders.startDate)}}",style: TextStyle(
+            child: Text(GlobalUtils.getDateMonthYearString(reminders.startDate),style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w900,fontSize: 18),
               maxLines: 2,

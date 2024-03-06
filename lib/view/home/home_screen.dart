@@ -358,64 +358,6 @@ class HomeScreen extends StatelessWidget {
     controller.controller.setDescription(controller.cameras[controller.flipCamera.value]);
   }
 
-  void SuccessDialogScreen(){
-    AlertDialog alert = AlertDialog(
-      backgroundColor:Colors.transparent,
-      // contentPadding: const EdgeInsets.all(15),
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10.0))),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Stack(
-            children: [
-              Positioned(
-                top: 150,
-                left: 5,
-                right: 5,
-                child: Container(
-                  padding: const EdgeInsets.fromLTRB(20,30,20,30),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20.0),
-                    border: Border.all(
-                      color: ColorConstants.back_black,
-                      width: 1.0,
-                    ),
-                    color: ColorConstants.back_black,
-                  ),
-                  child: Column(
-                    children: [
-                      SizedBox(height: 40,),
-                      Container(child: Text(Strings.add_to_reminder,style: TextStyle(fontSize: 18,fontWeight: FontWeight.w700,color: Colors.white),)),
-                    ],
-                  ),
-                )
-              ),
-              Container(
-                padding: EdgeInsets.fromLTRB(50,20,50,20),
-                // height: 100,
-                // width:size.width ,
-                child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0),
-                    child:SvgPicture.asset(ImageConstants.success_event)
-                ),
-              ),
-            ],
-          ),
-
-          Container(
-            padding: EdgeInsets.only(top: 20),
-            child:RoundedButton(text: Strings.done, textColor: ColorConstants.back_black,color: ColorConstants.addReminder,onPressed: () {  },),
-          ),
-
-        ],
-      ),
-    );
-
-    Get.dialog(alert, barrierDismissible: false);
-  }
-
 }
 
 
