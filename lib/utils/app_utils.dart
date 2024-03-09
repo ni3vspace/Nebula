@@ -143,6 +143,29 @@ class AppUtils {
     }
   }
 
+  static getApiError(ApiResponse response) {
+    try {
+      switch (response.statusCode) {
+        case 0:
+          return "Unable to load, please try again";
+        case 400:
+          return (response.data).errors.first.toString();
+        case 401:
+          return "";
+          // AppUtils.logoutUser(Strings.sessionExpired);
+          break;
+        case 403:
+        case 500:
+          return response.data.toString();
+        default:
+          return response.data.toString();
+      }
+    } catch (e) {
+      // FirebaseCrashlytics.instance.recordError(e, null);
+      return "Error Occurred: ${e.toString()}";
+    }
+  }
+
   static Future<ApiResponse> uploadDocument(
       String filename, String filePath) async {
     try {

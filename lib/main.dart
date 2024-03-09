@@ -158,7 +158,7 @@ class MyApp extends StatelessWidget {
       title: Strings.nebula,
       // navigatorObservers: [AnalyticsHelper.getAnalyticsObserver()],
       theme: ThemeData(
-          primarySwatch: Colors.deepOrange,
+          primarySwatch: Colors.deepPurple,
           scaffoldBackgroundColor: Colors.white,
           backgroundColor: Colors.white),
     );

@@ -63,35 +63,12 @@ class GlobalUtils {
     }
     try{
       DateTime dateTime=DateTime.parse(str);
-      List months = [
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-        'Aug',
-        'Sep',
-        'Oct',
-        'Nov',
-        'Dec'
-      ];
 
-      List weekDays = [
-        'Mon',
-        'Tue',
-        'Wed',
-        'Thur',
-        'Fri',
-        'Sat',
-        'Sun'
-      ];
       // DateTime datetime = (date as Timestamp).toDate();
       // DateTime parseDateTime =
       // DateFormat("yyyy-MM-dd HH:mm:ss").parse(dateTime.toString());
       // var time = DateFormat("hh:mm a").format(parseDateTime);
-      return "${weekDays[dateTime.weekday-1]}, ${ months[dateTime.month - 1]} ${dateTime.day} ${getDayOfMonthSuffixes?getDayOfMonthSuffix(dateTime.day)+" ":""}" +
+      return "${getDayAndMonthString(dateTime.weekday-1,false)}, ${ getDayAndMonthString(dateTime.month - 1,true)} ${dateTime.day} ${getDayOfMonthSuffixes?getDayOfMonthSuffix(dateTime.day)+" ":""}" +
 
           ", " +
           dateTime.year
@@ -104,6 +81,39 @@ class GlobalUtils {
       return "";
     }
   }
+  static String getDayAndMonthString(int dayNum,bool isMonth) {
+    List months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
+    ];
+
+    List weekDays = [
+      'Mon',
+      'Tue',
+      'Wed',
+      'Thur',
+      'Fri',
+      'Sat',
+      'Sun'
+    ];
+
+    if(isMonth){
+      return months[dayNum];
+    }else{
+      return weekDays[dayNum];
+    }
+  }
+
   static String getDayOfMonthSuffix(int dayNum) {
     if (!(dayNum >= 1 && dayNum <= 31)) {
       throw Exception('Invalid day of month');
@@ -130,6 +140,17 @@ class GlobalUtils {
       return null;
     }
     return DateFormat('yyyy-MM-dd').format(DateTime.parse(date));
+  }
+
+  static String? getDateAndMonthOnly(String? date,bool isReturnString) {
+    if(date==null || date.isEmpty){
+      return null;
+    }
+    DateTime dateTime=DateTime.parse(date);
+    if(isReturnString){
+      return getDayAndMonthString(dateTime.month-1,true);
+    }
+    return dateTime.day.toString();
   }
 }
 

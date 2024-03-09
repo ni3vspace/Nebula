@@ -41,6 +41,11 @@ class LoginController extends GetxController {
         Fluttertoast.showToast(msg: 'Sign-in cancelled by user');
       }
 
+    }).onError((error, stackTrace) {
+      Fluttertoast.showToast(msg:error.toString(),toastLength: Toast.LENGTH_LONG);
+      isLoading.value=false;
+      LogUtils.error("googleSignIn stackTrace");
+      LogUtils.error(error);
     }).catchError((e) {
       Fluttertoast.showToast(msg:e.toString(),toastLength: Toast.LENGTH_LONG);
       isLoading.value=false;

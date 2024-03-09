@@ -18,6 +18,7 @@ class Strings {
   static String done = "done";
   static String save = "Save";
   static String feedback = "Feedback";
+  static String all_reminders = "ALL REMINDERS";
   static String feedback_enter = "Enter your feedback here";
 
   static String event = "Event";
@@ -25,6 +26,8 @@ class Strings {
   static String description = "Description";
   static String timDateVenue = "TIME & DATE";
   static String add_to_reminder = "ADD TO REMINDER";
+  static String no_reminder = "No reminder found";
+  static String retry = "Retry";
 
   //messages
   static String addedCalender = "Your reminder has been set!";

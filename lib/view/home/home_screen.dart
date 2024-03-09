@@ -13,6 +13,7 @@ import 'package:nebula/utils/widgets/rounded_buttons.dart';
 import 'package:nebula/view/home/add_reminder_popup_screen.dart';
 import 'package:nebula/view/home/feedback/feedback_screen.dart';
 import '../../models/reminder_model.dart';
+import '../../routes/app_pages.dart';
 import '../../utils/color_constants.dart';
 import '../../utils/strings.dart';
 import '../../utils/widgets/circle_ring_icon.dart';
@@ -92,6 +93,7 @@ class HomeScreen extends StatelessWidget {
                           onTap: (){
                             // roundedDialog(AddReminderPopUpScreen(reminders: Reminders(),));
                             // SuccessDialogScreen();
+                            Get.toNamed(Routes.event_list);
                           },
                           child: Padding(
                             padding: EdgeInsets.symmetric(horizontal: 20),
