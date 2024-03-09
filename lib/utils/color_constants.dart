@@ -6,6 +6,8 @@ class ColorConstants{
   static Color presentaion = hexToColor('#7DA1FF');
   static Color back_black = hexToColor('#181818');
   static Color addReminder = hexToColor('#FFE8CA');
+  static Color saveFeedbackButton = hexToColor('#B2FF83');
+  static Color borderColorFeedback = hexToColor('#5C5C5C');
 
 
 

@@ -11,6 +11,7 @@ import 'package:nebula/utils/image_constants.dart';
 import 'package:nebula/utils/log_utils.dart';
 import 'package:nebula/utils/widgets/rounded_buttons.dart';
 import 'package:nebula/view/home/add_reminder_popup_screen.dart';
+import 'package:nebula/view/home/feedback/feedback_screen.dart';
 import '../../models/reminder_model.dart';
 import '../../utils/color_constants.dart';
 import '../../utils/strings.dart';
@@ -281,7 +282,9 @@ class HomeScreen extends StatelessWidget {
                       child: Container(
                         padding:EdgeInsets.all(5),
                         child: GestureDetector(
-                          onTap: (){},
+                          onTap: (){
+                            Get.dialog(FeedbackScreen());
+                          },
                           child: SvgPicture.asset(ImageConstants.feedback),
                         ),
                       ),
