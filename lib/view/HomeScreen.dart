@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:nebula/utils/color_constants.dart';
 import 'package:nebula/view/HomeScreen1.dart';
 
-import 'Constants.dart';
 import 'HomeScreen2.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -11,7 +11,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     print("log=="+ (MediaQuery.of(context).size.height*0.02).toString());
     return Scaffold(
-      backgroundColor: Constants.bgColor,
+      backgroundColor: ColorConstants.bgColor,
       body:Container(
         decoration: BoxDecoration(
           image: DecorationImage(

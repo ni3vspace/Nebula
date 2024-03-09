@@ -5,8 +5,8 @@ import 'package:nebula/utils/image_constants.dart';
 import 'package:nebula/view/auth/Login/LoginController.dart';
 
 import '../../../routes/app_pages.dart';
+import '../../../utils/color_constants.dart';
 import '../../../utils/widgets/rounded_buttons.dart';
-import '../../Constants.dart';
 import 'LoginSuccess.dart';
 
 class LoginPage extends StatelessWidget {
@@ -15,7 +15,7 @@ class LoginPage extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     final LoginController controller = Get.find();
     return Scaffold(
-      backgroundColor: Constants.bgColor,
+      backgroundColor: ColorConstants.bgColor,
       body: Stack(
         children: [
           Positioned(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-import 'Constants.dart';
+import '../utils/color_constants.dart';
 
 class HomeScreen2 extends StatelessWidget {
   const HomeScreen2({Key? key}) : super(key: key);
@@ -18,7 +18,7 @@ class HomeScreen2 extends StatelessWidget {
     final panelHeightOpen = size
         .height * 0.75;
     return Scaffold(
-      backgroundColor: Constants.bgColor,
+      backgroundColor: ColorConstants.bgColor,
       body: widgetSildingPanel(panelHeightClosed,size),
     );
     return Scaffold(

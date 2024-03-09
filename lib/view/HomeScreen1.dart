@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'Constants.dart';
+import '../utils/color_constants.dart';
 import 'HomeScreen2.dart';
 
 class HomeScreen1 extends StatelessWidget {
@@ -10,7 +10,7 @@ class HomeScreen1 extends StatelessWidget {
   Widget build(BuildContext context) {
     print("log=="+ (MediaQuery.of(context).size.height*0.02).toString());
     return Scaffold(
-      backgroundColor: Constants.bgColor,
+      backgroundColor: ColorConstants.bgColor,
       body:GestureDetector(
         onTap: (){
           Navigator.push( context, MaterialPageRoute(builder: (context) => HomeScreen2()));

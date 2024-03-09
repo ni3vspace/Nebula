@@ -6,9 +6,6 @@ import 'package:nebula/utils/image_constants.dart';
 import 'package:nebula/utils/widgets/circler_widget.dart';
 import 'package:nebula/view/HomeScreen.dart';
 
-import '../../Constants.dart';
-
-
 class LoginSuccess extends StatelessWidget {
   final String userMail;
   const LoginSuccess({Key? key,required this.userMail}) : super(key: key);
