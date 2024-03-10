@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:nebula/utils/app_utils.dart';
 import 'package:nebula/utils/log_utils.dart';
+import 'package:nebula/utils/user_pref.dart';
 
 import '../../utils/strings.dart';
 import '../api_provider.dart';
@@ -15,7 +16,9 @@ class AllEventsRepo {
 
   Future<ApiResponse> getAllEvents() async {
     try {
-      final res = await apiProvider.get( "${Strings.baseUrl}/Prod/event/process");
+      String userName=await UserPref.userName ?? "";
+      userName="Krishna";
+      final res = await apiProvider.get( "/Prod/event/findByUser/$userName");
       return AppUtils.getApiResponse(res);
     } on SocketException {
       return ApiResponse.error(0, Strings.noInternetConnection);

@@ -25,7 +25,7 @@ class AllEventsController extends GetxController{
 
   }
 
-  Future<void> fetchLeadChatList() async {
+  /*Future<void> fetchLeadChatList() async {
     eventsUIStatus.value = UIStatus.loading();
     DateTime dateTime1=DateTime.now().add(Duration(minutes: 2));
     DateTime dateTime2=dateTime1.add(Duration(minutes: 3));
@@ -35,16 +35,16 @@ class AllEventsController extends GetxController{
     allEventsList.add(Reminders(id: "10001",name: "Manual added",startDate: startDate,endDate: endDate));
 
       eventsUIStatus.value = UIStatus.success();
-  }
-  /*Future<void> fetchLeadChatList() async {
+  }*/
+  Future<void> fetchLeadChatList() async {
     try {
       eventsUIStatus.value = UIStatus.loading();
       ApiResponse response = await allEventsRepo.getAllEvents();
       switch (response.status) {
         case Status.SUCCESS:
           {
-            List<dynamic> responseData = json.decode(response.data);
-            List<Reminders> remindersList = responseData.map((json) => Reminders.fromJson(json)).toList();
+            // var responseData = json.decode(response.data);
+            List<Reminders> remindersList = (response.data as List).map((json) => Reminders.fromJson(json)).toList();
             LogUtils.debugLog(remindersList.first.toJson().toString());
 
             allEventsList.value =  List<Reminders>.from(remindersList);
@@ -63,5 +63,5 @@ class AllEventsController extends GetxController{
     } catch (e) {
       eventsUIStatus.value = UIStatus.error(e.toString());
     }
-  }*/
+  }
 }

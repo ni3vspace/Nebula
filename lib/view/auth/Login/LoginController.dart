@@ -33,8 +33,8 @@ class LoginController extends GetxController {
     _googleSignIn.signIn().then((userData) async {
       if(userData!=null){
         LogUtils.debugLog("userData==="+userData.toString());
-        // _loginSuccess(userData);
-       await callApi(userData);
+        _loginSuccess(userData);
+       // await callApi(userData);
 
       }else{
         isLoading.value=false;

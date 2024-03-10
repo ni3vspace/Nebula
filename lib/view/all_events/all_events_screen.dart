@@ -74,8 +74,12 @@ class AllEventsScreen extends StatelessWidget {
                           .eventsUIStatus.value.status ==
                           Result.SUCCESS
                           ? controller.allEventsList.isNotEmpty
-                          ? ListView.builder(
+                          ? ListView.separated(
                           itemCount: controller.allEventsList.length,
+                          separatorBuilder: (context, index) =>  Divider(
+                            thickness: 1.5,
+                            color: ColorConstants.divider_line,
+                          ),
                           itemBuilder: (BuildContext context, int index) {
                             return eventItemWidget(
                                 controller.allEventsList[index]);

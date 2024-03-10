@@ -9,6 +9,7 @@ class ColorConstants{
   static Color saveFeedbackButton = hexToColor('#B2FF83');
   static Color borderColorFeedback = hexToColor('#5C5C5C');
   static Color gray_text = hexToColor('#595959');
+  static Color divider_line = hexToColor('#2D2D2D');
   static Color bgColor=const Color(0xFFFFB2E7);
 
 
