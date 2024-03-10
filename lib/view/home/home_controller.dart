@@ -145,7 +145,7 @@ class HomeController extends GetxController{
           LogUtils.debugLog(remindersList.first.toJson().toString());
 
           if(remindersList.isNotEmpty){
-            roundedDialog(AddReminderPopUpScreen(reminders: remindersList[0],onPressed: () async {
+            roundedDialog(AddReminderPopUpScreen(reminders: remindersList[0],fromListPage:true,onPressed: () async {
              var result= await addEventToCalendar(remindersList[0]);
              if(result){
                Navigator.pop(Get.overlayContext!);

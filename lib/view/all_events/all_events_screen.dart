@@ -8,6 +8,8 @@ import '../../../utils/ui_status.dart';
 import '../../../utils/widgets/empty_placeholder.dart';
 import '../../../utils/widgets/list_error_placeholder.dart';
 import '../../models/reminder_model.dart';
+import '../../utils/widgets/common_widgets.dart';
+import '../home/add_reminder_popup_screen.dart';
 import 'all_events_controller.dart';
 import 'package:nebula/utils/global_utils.dart';
 
@@ -111,7 +113,14 @@ class AllEventsScreen extends StatelessWidget {
   }
 
   Widget eventItemWidget(Reminders event) {
-    return Container(child: Row(
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: (){
+        roundedDialog(AddReminderPopUpScreen(reminders: event,fromListPage:true,onPressed: () async {
+
+        },));
+      },
+      child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(

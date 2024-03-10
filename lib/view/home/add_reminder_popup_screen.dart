@@ -12,8 +12,9 @@ import '../../utils/widgets/circler_widget.dart';
 
 class AddReminderPopUpScreen extends StatelessWidget {
   Reminders reminders;
+  bool fromListPage;
   final VoidCallback onPressed;
-  AddReminderPopUpScreen({Key? key,required this.reminders,required this.onPressed}) : super(key: key);
+  AddReminderPopUpScreen({Key? key,required this.reminders,required this.onPressed,required this.fromListPage}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +26,7 @@ class AddReminderPopUpScreen extends StatelessWidget {
         Stack(
           children: [
             Container(
+              alignment: Alignment.center,
               height: 200,
               // width:size.width ,
               child: ClipRRect(
@@ -37,7 +39,8 @@ class AddReminderPopUpScreen extends StatelessWidget {
               left: 10,
               child: GestureDetector(
                 onTap: (){
-                  Get.back(closeOverlays: true);
+                  Get.back();
+                  // Get.back(closeOverlays: true);
                 },
                 child: CircleWithIconWidget(assetName: ImageConstants.close,fillColor: ColorConstants.camItemsBack,height: 30,width: 30,)),)
           ],
@@ -144,7 +147,7 @@ class AddReminderPopUpScreen extends StatelessWidget {
         ),
         Container(
           padding: EdgeInsets.only(top: 10),
-          child:RoundedButton(text: Strings.add_to_reminder, textColor: ColorConstants.back_black,color: ColorConstants.addReminder,onPressed: onPressed,),
+          child:RoundedButton(text: fromListPage?Strings.delete.toUpperCase():Strings.add_to_reminder, textColor: ColorConstants.back_black,color: ColorConstants.addReminder,onPressed: onPressed,),
         ),
 
       ],

@@ -17,6 +17,7 @@ class Strings {
   static String loading = "Loading...";
   static String done = "done";
   static String save = "Save";
+  static String delete = "Delete";
   static String feedback = "Feedback";
   static String all_reminders = "ALL REMINDERS";
   static String feedback_enter = "Enter your feedback here";
