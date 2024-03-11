@@ -142,41 +142,13 @@ class HomeScreen extends StatelessWidget {
             bottom: 50,
             right: 40,
             left: 40,
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Draggable(
-                  data: 'capture',
-                  childWhenDragging: camIcon(false,"PIN"),
-
-                  dragAnchorStrategy: pointerDragAnchorStrategy,
-                  feedback: camIcon(true,"PIN"),
-                  child:camIcon(true,"PIN"),
-                  // onDragStarted: ()=> controller.pinDragStarted.value=true,
-                  // onDragEnd: (draggableDetails)=> controller.pinDragStarted.value=false,
-                  onDragCompleted: () {
-                    // controller.pinDragStarted.value=false;
-                    LogUtils.debugLog("DragCompleted");
-                  },
-                ),
-
-                DragTarget(
-                    builder: (BuildContext context, List<Object?> candidateData, List<dynamic> rejectedData) {
-                      return CircleRingIcon(size: 60,);
-                    },
-                    onWillAccept: (data) => data == 'capture',
-                    onAccept: (data) {
-                      LogUtils.debugLog("DragTarget onAccept");
-                      controller.captureImage();
-                    },
-                  onLeave: (data){
-                    LogUtils.debugLog("DragTarget onLeave="+data.toString());
-                  },
-                 ),
-
-                camIcon(true,"PRESENTSTION"),
-            ],)),
+            child: GestureDetector(
+              onTap: (){
+                LogUtils.debugLog("captured");
+                controller.captureImage();
+              },
+              child: CircleRingIcon(size: 60,),
+            ),),
         Positioned(
             top: 20,
             right: 15,
@@ -347,13 +319,15 @@ class HomeScreen extends StatelessWidget {
 
         Positioned(
             bottom: 20,
-            left: 80,
-            right: 80,
-            child:Container(
+            left: 10,
+            right: 10,
+            child:setReminderPopUp(controller)
+        )
+            /*Container(
               child: RoundedButton(text: Strings.make_reminder.toUpperCase(),
                 color: ColorConstants.camItemsBack1,textColor:Colors.white,
                 onPressed: () {controller.callReminderApi(); },),
-            ) )
+            ) )*/
       ],
     );
   }
@@ -361,6 +335,57 @@ class HomeScreen extends StatelessWidget {
   void _callOpenCamera(HomeController controller) {
     controller.lastImageFileName.value=null;
     controller.controller.setDescription(controller.cameras[controller.flipCamera.value]);
+  }
+  Widget setReminderPopUp(HomeController controller){
+
+    return Container(
+      padding: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+        color: ColorConstants.camItemsBack1,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.only(top: 10),
+          child: Text(Strings.actionPopUp,style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w900,fontSize: 18),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+
+          Container(
+            padding: EdgeInsets.only(top: 10),
+            child:RoundedButton(text: Strings.reminder, imageName: ImageConstants.pinIcon,
+              padding: EdgeInsets.all(10),
+              iconHeight: 20,iconWidth: 20,
+              textColor: ColorConstants.back_black,color: ColorConstants.pinOnCamera,onPressed: (){
+                controller.callReminderApi();
+            },),
+          ),
+          Opacity(
+            opacity: 0.5,
+            child: Container(
+              padding: EdgeInsets.only(top: 1),
+              child:RoundedButton(text: Strings.classroom,
+                imageName: ImageConstants.presentaionIcon,
+                padding: EdgeInsets.all(10),
+                iconHeight: 20,iconWidth: 20,
+                textColor: ColorConstants.back_black,color: ColorConstants.presentaion,onPressed: (){
+
+              },),
+            ),
+          ),
+
+        ],
+      ),
+    );
+    
   }
 
 }

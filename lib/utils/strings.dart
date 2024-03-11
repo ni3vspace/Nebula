@@ -12,6 +12,7 @@ class Strings {
   static String baseUrl = "https://3ux3va99g5.execute-api.us-east-1.amazonaws.com";
   static String api_key = "CKuz5fLE4U7PZpNDMNN3H1xuzwEM0QLu5irSteZh";
   static String reminder = "Reminder";
+  static String classroom = "Classroom";
   static String make_reminder = "Make a reminder";
   static String noInternetConnection = "No Internet Connection";
   static String loading = "Loading...";
@@ -21,6 +22,8 @@ class Strings {
   static String feedback = "Feedback";
   static String all_reminders = "ALL REMINDERS";
   static String feedback_enter = "Enter your feedback here";
+
+  static String actionPopUp = "Where do you want to add this?";
 
   static String event = "Event";
   static String location = "Location";
