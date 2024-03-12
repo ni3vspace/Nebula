@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -59,21 +60,23 @@ class HomeScreen extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Container(
-                  margin: EdgeInsets.fromLTRB(20,20,20,20),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20.0),
-                    border: Border.all(
-                      color: Colors.transparent,
-                      width: 2.0,
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(20,20,20,20),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.0),
+                      border: Border.all(
+                        color: Colors.transparent,
+                        width: 2.0,
+                      ),
                     ),
+                    child: Obx(() => controller.camInitialize.value == true ?
+                    ClipRRect(
+                        borderRadius: BorderRadius.circular(18.0),
+                        child:controller.lastImageFileName.value !=null
+                            ?_previewWidget(controller,size):_cameraView(controller,aspectRatio)
+                    ):Container()),
                   ),
-                  child: Obx(() => controller.camInitialize.value == true ?
-                  ClipRRect(
-                      borderRadius: BorderRadius.circular(18.0),
-                      child:controller.lastImageFileName.value !=null
-                          ?_previewWidget(controller,size):_cameraView(controller,aspectRatio)
-                  ):Container()),
                 ),
 
                 Container(
@@ -137,7 +140,9 @@ class HomeScreen extends StatelessWidget {
   _cameraView(HomeController controller, double aspectRatio) {
     return Stack(
       children: [
-        AspectRatio(aspectRatio:aspectRatio,child: CameraPreview(controller.controller)),
+        ClipRRect(
+            borderRadius: BorderRadius.circular(18.0),
+            child: AspectRatio(aspectRatio:aspectRatio,child: CameraPreview(controller.controller))),
         Positioned(
             bottom: 50,
             right: 40,
@@ -293,12 +298,18 @@ class HomeScreen extends StatelessWidget {
 
   _previewWidget(HomeController controller, Size size) {
     return Stack(
+      alignment: AlignmentDirectional.center,
       children: [
-        Container(
-          child: Image.file(controller.lastImageFileName.value!),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(18.0),
+          child: DottedBorder(
+              strokeWidth: 2.0,
+              color: Colors.grey,
+              dashPattern: [8, 4],
+              child: Image.file(controller.lastImageFileName.value!,)),
         ),
         Positioned(
-            top: 10,
+            top: 30,
             left: 10,
             right: 10,
             child: Row(
@@ -318,7 +329,7 @@ class HomeScreen extends StatelessWidget {
             )),
 
         Positioned(
-            bottom: 20,
+            bottom: 40,
             left: 10,
             right: 10,
             child:setReminderPopUp(controller)
