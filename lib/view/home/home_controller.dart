@@ -14,6 +14,7 @@ import 'package:nebula/utils/global_utils.dart';
 import 'package:nebula/utils/log_utils.dart';
 import 'package:nebula/view/home/add_reminder_popup_screen.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:timezone/timezone.dart';
 import '../../api/responses/api_response.dart';
 import '../../utils/app_utils.dart';
@@ -21,7 +22,7 @@ import '../../utils/strings.dart';
 import '../../utils/widgets/common_widgets.dart';
 import 'package:path/path.dart' as path;
 
-class HomeController extends GetxController{
+class HomeController extends GetxController with WidgetsBindingObserver{
   ReminderRepo reminderRepo;
   HomeController(
       {required this.reminderRepo});
@@ -33,17 +34,23 @@ class HomeController extends GetxController{
   Rx<FlashMode?> currentFlashMode= Rx(FlashMode.off);
   Rx<int> flipCamera= Rx(CamerasEnum.BACK_CAMERA.getCameraVal());
   Rx<bool> cameraMenuVisible= Rx(false);
+  Rx<CameraException?> cameraException= Rx(null);
   DeviceCalendarPlugin deviceCalendarPlugin = DeviceCalendarPlugin();
-  var camError="".obs;
   String? calenderId;
+  bool isCalenderPermissionEnabled=false;
   @override
   void onInit() {
     super.onInit();
+    LogUtils.debugLog("onInit");
+    WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((duration) async {
-      await getCalenderIdCreate();
+
+      cameraException.value=null;
       cameras = await availableCameras();
       controller = CameraController(cameras[flipCamera.value], ResolutionPreset.max,enableAudio: false);
-      controller.initialize().then((_) {
+      controller.initialize().then((_) async {
+        await getCalenderIdCreate();
+        isCalenderPermissionEnabled=await validateCalenderPermission();
         camInitialize.value=true;
         cameraMenuVisible.value=true;
         controller.setFlashMode(currentFlashMode.value!);
@@ -55,7 +62,7 @@ class HomeController extends GetxController{
         LogUtils.error('error'+e.toString());
         if (e is CameraException) {
           LogUtils.error('camera error'+e.toString());
-          camError.value=e.code;
+          cameraException.value=e;
           switch (e.code) {
             case 'CameraAccessDenied':
               if(e.description!=null)
@@ -123,6 +130,13 @@ class HomeController extends GetxController{
   }
 
   void callReminderApi() async {
+
+    bool status = await validateCalenderPermission();
+    if(!status){
+      AppUtils.getToast(message: "Please enable calender from app permission ");
+      return;
+    }
+
     showLoadingDialog();
     try {
       String fileName="",filePath="";
@@ -311,14 +325,56 @@ class HomeController extends GetxController{
     }
   }
 
-  Future<void> addEventManual() async {
-    DateTime dateTime1=DateTime.now().add(Duration(minutes: 2));
-    DateTime dateTime2=dateTime1.add(Duration(minutes: 3));
-    String startDate = DateFormat("yyyy-MM-dd HH:mm:ss").format(dateTime1);
-    String endDate = DateFormat("yyyy-MM-dd HH:mm:ss").format(dateTime2);
-    LogUtils.debugLog("StartDate= $startDate Enddate=$endDate");
-    await addEventToCalendar(Reminders(id: "10001",name: "Manual added",startDate: startDate,endDate: endDate),);
-    retrieveEvents(isClearAll:false);
+  validateCalenderPermission() async {
+    Result<bool> status = await deviceCalendarPlugin.hasPermissions();
+    return status.data;
   }
+
+  @override
+  void onClose() {
+    // Remove observer when controller is closed
+    LogUtils.debugLog("life cycle onClose");
+    WidgetsBinding.instance?.removeObserver(this);
+    // Other cleanup code...
+    super.onClose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    LogUtils.debugLog("life cycle didChangeAppLifecycleState");
+    super.didChangeAppLifecycleState(state);
+
+    if (state == AppLifecycleState.resumed) {
+      LogUtils.debugLog("life cycle didChangeAppLifecycleState resumed");
+      // Check if permission is enabled, and if so, refresh or reinitialize the screen
+      // For example:
+      if (!camInitialize.value && cameraException.value!=null) {
+        // Refresh or reinitialize the screen here
+        refreshScreen(false);
+      }
+      if(!isCalenderPermissionEnabled){ //till calender permission not enable
+        refreshScreen(true);
+      }
+    }
+  }
+
+  // Method to refresh or reinitialize the screen
+  Future<void> refreshScreen(bool isCalender) async {
+    if(isCalender){
+      bool status = await validateCalenderPermission();
+      if(status){
+        await getCalenderIdCreate();
+        isCalenderPermissionEnabled=true;
+      }
+    }else{
+      LogUtils.debugLog("life cycle cameraException="+cameraException.value.toString());
+      final status = await Permission.camera.isGranted;
+      LogUtils.debugLog("life cycle Permission="+status.toString());
+      if(status){
+        onInit();
+      }
+    }
+  }
+
 
 }

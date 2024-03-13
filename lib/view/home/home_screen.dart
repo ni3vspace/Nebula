@@ -13,6 +13,7 @@ import 'package:nebula/utils/log_utils.dart';
 import 'package:nebula/utils/widgets/rounded_buttons.dart';
 import 'package:nebula/view/home/add_reminder_popup_screen.dart';
 import 'package:nebula/view/home/feedback/feedback_screen.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../../models/reminder_model.dart';
 import '../../routes/app_pages.dart';
 import '../../utils/color_constants.dart';
@@ -75,7 +76,7 @@ class HomeScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(18.0),
                         child:controller.lastImageFileName.value !=null
                             ?_previewWidget(controller,size):_cameraView(controller,aspectRatio)
-                    ):Container()),
+                    ):permissionError(controller)),
                   ),
                 ),
 
@@ -397,6 +398,29 @@ class HomeScreen extends StatelessWidget {
       ),
     );
     
+  }
+
+  permissionError(HomeController controller) {
+    if(controller.cameraException.value!=null){
+      return Container(
+        alignment: Alignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(controller.cameraException.value?.description ?? "",style: const TextStyle(fontSize: 17,color: Colors.white),),
+            Container(
+              margin: EdgeInsets.all(10),
+              child: RoundedButton(text: "Open App Setting", 
+                  padding: EdgeInsets.all(10),
+                  onPressed: (){
+                    openAppSettings();
+              }),
+            )
+          ],
+        ),
+      );
+    }
+    return Container();
   }
 
 }
