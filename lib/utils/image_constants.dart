@@ -24,6 +24,8 @@ class ImageConstants{
   static String splashPng =  "assets/png_image/SPLASH_SCREEN.png";
   static String logo_png =  "assets/png_image/logo_png.png";
   static String blank_screen =  "assets/png_image/blank_screen.png";
+  static String ShieldWarning =  "assets/images/ShieldWarning.svg";
+  static String disclaimer_text =  "assets/images/disclaimer_text.svg";
 
   //svg
 }

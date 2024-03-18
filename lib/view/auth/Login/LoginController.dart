@@ -115,7 +115,7 @@ class LoginController extends GetxController {
 
     // userData===GoogleSignInAccount:{displayName: Nitin Sanga, email: n3.sanga@gmail.com, id: 113616431374668691612, photoUrl: https://lh3.googleusercontent.com/a/ACg8ocJWybnzEafDFYMgwjPhz-O8WwE0AJWmbVj8RhOicE13og=s96-c, serverAuthCode: 4/0AeaYSHCTmi93QVxZYkmuKxpD9kWVd7AmrWHtUa5-89wZBIPRPPzTsydYTIw_6PimS7UgwA}
     Future.delayed(const Duration(seconds: 2), () async {
-      Get.offNamed(Routes.home);
+      Get.offNamed(Routes.disclaimer);
     });
   }
 }

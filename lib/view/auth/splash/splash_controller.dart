@@ -18,11 +18,17 @@ class SplashController extends GetxController with GetSingleTickerProviderStateM
   void onReady() {
     LogUtils.debugLog("SplashController onReady");
     Future.delayed(const Duration(seconds: 4), () async {
+      bool disclaimerRead= await PreferencesHelper.getBool(StorageConstants.disclaimerRead);
+
       String userEmail = await PreferencesHelper.getString(
           StorageConstants.userEmail);
       // Get.offNamed(Routes.login);
       if(userEmail.isNotEmpty){
-        Get.offNamed(Routes.home);
+        if(!disclaimerRead){
+          Get.offNamed(Routes.disclaimer);
+        }else{
+          Get.offNamed(Routes.home);
+        }
       }else{
         Get.offNamed(Routes.login);
       }

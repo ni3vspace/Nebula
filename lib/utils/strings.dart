@@ -26,6 +26,7 @@ class Strings {
   static String all_reminders = "ALL REMINDERS";
   static String feedback_enter = "Enter your feedback here";
   static String feedback_enter_error = "Please enter feedback";
+  static String Continue = "Continue";
 
   static String actionPopUp = "Where do you want to add this?";
 
@@ -42,4 +43,9 @@ class Strings {
   static String addedCalender = "Your reminder has been set!";
   static String addedFeedback = "Your feedback has been submit successfully!";
   static String feedback_title = "We value your feedback! Let us know what you liked or disliked about the app to help us improve your experience.";
+  static String Disclaimer = "Disclaimer";
+  static String Disclaimer_msg = 'MVP Version Limitations Nebula App\'s MVP version does not ensure user privacy.\nAvoid sharing confidential information through the app.\n\n The app uses ChatGPT for image processing; ChatGPT\'s privacy policy applies.\nExercise caution with personal data until full privacy features are implemented.\n';
+
+  static String Disclaimer_tc_msg = 'Your support is crucial for Nebula App\'s growth\n.'
+      'Your feedback will shape its future. Together, we\'ll create an exceptional experience.';
 }
