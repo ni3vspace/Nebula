@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:nebula/api/repository/reminder_repo.dart';
 import 'package:nebula/utils/image_constants.dart';
 import 'package:nebula/utils/widgets/circler_widget.dart';
 import 'package:nebula/utils/widgets/rounded_buttons.dart';
@@ -11,8 +12,8 @@ import '../../../utils/color_constants.dart';
 import '../../../utils/strings.dart';
 
 class FeedbackScreen extends StatelessWidget {
-
-  FeedbackScreen({Key? key}) : super(key: key);
+  ReminderRepo reminderRepo;
+  FeedbackScreen(this.reminderRepo, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -80,39 +81,46 @@ class FeedbackScreen extends StatelessWidget {
                       padding: EdgeInsets.only(top: 15),
                       child: Text(
                         Strings.feedback_title,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 17,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),
-                    Container(
-                      padding: EdgeInsets.only(top: 10),
-                      child: TextFormField(
-                        scrollPadding: EdgeInsets.symmetric(
-                            vertical: MediaQuery.of(context).viewInsets.bottom),
-                        controller: controller.textEditingController,
-                        keyboardType: TextInputType.multiline,
-                        textInputAction: TextInputAction.done,
-                        maxLines: 19,
-                        style: TextStyle(color: Colors.white,fontSize: 17),
-                        cursorColor: ColorConstants.saveFeedbackButton,
-                        // Set text color
-                        decoration: InputDecoration(
-                          // focusColor: ColorConstants.saveFeedbackButton,
-                          hintText: Strings.feedback_enter,
-                          hintStyle: TextStyle(color: ColorConstants.borderColorFeedback),
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: ColorConstants.borderColorFeedback,
+                    Form(
+                      key: controller.formKey,
+                      child: Container(
+                        padding: EdgeInsets.only(top: 10),
+                        child: TextFormField(
+                          scrollPadding: EdgeInsets.symmetric(
+                              vertical: MediaQuery.of(context).viewInsets.bottom),
+                          controller: controller.textEditingController,
+                          keyboardType: TextInputType.multiline,
+                          textInputAction: TextInputAction.done,
+                          maxLines: 19,
+                          style: TextStyle(color: Colors.white,fontSize: 17),
+                          cursorColor: ColorConstants.saveFeedbackButton,
+                          // Set text color
+                          decoration: InputDecoration(
+                            // focusColor: ColorConstants.saveFeedbackButton,
+                            hintText: Strings.feedback_enter,
+                            hintStyle: TextStyle(color: ColorConstants.borderColorFeedback),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: ColorConstants.borderColorFeedback,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: ColorConstants.saveFeedbackButton,
+                              ),
                             ),
                           ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: ColorConstants.saveFeedbackButton,
-                            ),
-                          ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return Strings.feedback_enter_error;
+                              }}
                         ),
                       ),
                     ),
@@ -122,7 +130,13 @@ class FeedbackScreen extends StatelessWidget {
                       child: RoundedButton(
                         text: Strings.save,
                         color: ColorConstants.saveFeedbackButton,
-                        onPressed: () {},
+                        onPressed: () {
+                          final isvalid = controller.formKey.currentState?.validate();
+                          if (isvalid!=null && isvalid) {
+                            controller.callApi(reminderRepo,controller.textEditingController.text.trim());
+                          }
+
+                        },
                       ),
                     ),
                   ],

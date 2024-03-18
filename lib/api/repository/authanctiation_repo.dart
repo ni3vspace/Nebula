@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:nebula/utils/strings.dart';
@@ -13,7 +14,7 @@ class AuthanticationRepo{
 
   Future<ApiResponse> verifyEmail(String email) async {
     try {
-      final res = await apiProvider.get(Strings.baseUrl + "/Prod/user/verifyByEmailId");
+      final res = await apiProvider.get("${Strings.userCreate}/Prod/user/verifyByEmailId");
       return AppUtils.getApiResponse(res);
     } on SocketException {
       return ApiResponse.error(0, Strings.noInternetConnection);
@@ -22,9 +23,16 @@ class AuthanticationRepo{
     }
   }
 
-  Future<ApiResponse> createEmail(String userName,String email,String pass) async {
+  Future<ApiResponse> createEmail(String userName,String emailId,String pass) async {
     try {
-      final res = await apiProvider.get(Strings.baseUrl + "/Prod/user/create");
+      var body=jsonEncode(
+          {"userName": userName, "emailId": emailId,"password":"password"});
+      // Map<String,String> body={
+      //   "userName":userName,
+      //   "emailId":email,
+      //   "password":"password"
+      // };
+      final res = await apiProvider.post(Strings.userCreate,body);
       return AppUtils.getApiResponse(res);
     } on SocketException {
       return ApiResponse.error(0, Strings.noInternetConnection);

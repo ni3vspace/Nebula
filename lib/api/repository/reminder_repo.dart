@@ -28,4 +28,17 @@ class ReminderRepo {
       return ApiResponse.error(1, "Error Occurred : ${e.toString()}");
     }
   }
+
+  Future<ApiResponse> callFeedbackCreate(String emailId,String description) async {
+    try {
+      final res = await apiProvider.post( apiProvider.feedbackAdd,jsonEncode(
+          {"description": description, "emailId": emailId}));
+      return AppUtils.getApiResponse(res);
+    } on SocketException {
+      return ApiResponse.error(0, Strings.noInternetConnection);
+    } catch (e) {
+      LogUtils.error(e);
+      return ApiResponse.error(1, "Error Occurred : ${e.toString()}");
+    }
+  }
 }

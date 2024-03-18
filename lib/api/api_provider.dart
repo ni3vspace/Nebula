@@ -12,18 +12,21 @@ class ApiProvider extends GetConnect {
   @override
   bool get allowAutoSignedCert => true;
 
-  String userName="";
+  String userName="", feedbackAdd="",baseUrl1="",userCreate="";
 
   @override
   Future<void> onInit() async {
-    httpClient.baseUrl = Strings.baseUrl;
+    baseUrl1=Strings.baseUrl;
+    feedbackAdd=Strings.feedbackAdd;
+    userCreate=Strings.userCreate;
+    // httpClient.baseUrl = Strings.baseUrl;
     userName = await UserPref.userName;
     httpClient.timeout = const Duration(seconds: 60);
     httpClient.maxAuthRetries = 3;
 
     httpClient.addRequestModifier<void>((request) async {
       request.headers['Content-type'] = "application/json";
-      request.headers['x-api-key'] = Strings.api_key;
+      request.headers['x-api-key'] = Strings.api_key1;
       request.headers['userName'] = userName;
       //request.headers['Accept'] = "text/plain";
       // request.headers['Authorization'] = "Bearer ${await UserPref.jwtToken}";

@@ -50,12 +50,13 @@ class AppUtils {
 
   static handleApiError(ApiResponse response) {
     try {
+      var resp = json.decode(response.data);
       switch (response.statusCode) {
         case 0:
           break;
         case 400:
           getToast(
-              message: (response.data).errors.first,
+              message: (resp["message"] ?? Strings.someThingWentWrong).errors.first,
               isError: true,
               toastGravity: ToastGravity.BOTTOM);
           break;
@@ -70,13 +71,13 @@ class AppUtils {
         case 403:
         case 500:
           getToast(
-              message: response.data,
+              message: resp["message"] ?? Strings.someThingWentWrong,
               isError: true,
               toastGravity: ToastGravity.BOTTOM);
           break;
         default:
           getToast(
-              message: response.data,
+              message: resp["message"] ?? Strings.someThingWentWrong,
               isError: true,
               toastGravity: ToastGravity.BOTTOM);
           break;
@@ -144,21 +145,22 @@ class AppUtils {
   }
 
   static getApiError(ApiResponse response) {
+    var resp = json.decode(response.data);
     try {
       switch (response.statusCode) {
         case 0:
           return "Unable to load, please try again";
         case 400:
-          return (response.data).errors.first.toString();
+          // return (response.data).errors.first.toString();
         case 401:
-          return "";
+          // return "";
           // AppUtils.logoutUser(Strings.sessionExpired);
           break;
         case 403:
         case 500:
-          return response.data.toString();
+          return resp["message"] ?? Strings.someThingWentWrong;
         default:
-          return response.data.toString();
+          return resp["message"] ?? Strings.someThingWentWrong;
       }
     } catch (e) {
       // FirebaseCrashlytics.instance.recordError(e, null);

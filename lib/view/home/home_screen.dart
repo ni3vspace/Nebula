@@ -263,7 +263,7 @@ class HomeScreen extends StatelessWidget {
                         padding:EdgeInsets.all(5),
                         child: GestureDetector(
                           onTap: (){
-                            Get.dialog(FeedbackScreen());
+                            Get.dialog(FeedbackScreen(controller.reminderRepo));
                           },
                           child: SvgPicture.asset(ImageConstants.feedback),
                         ),

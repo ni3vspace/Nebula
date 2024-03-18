@@ -6,6 +6,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:nebula/api/repository/authanctiation_repo.dart';
+import 'package:nebula/models/LoginSuccess.dart';
 import 'package:nebula/utils/log_utils.dart';
 
 import '../../../api/responses/api_response.dart';
@@ -33,8 +34,8 @@ class LoginController extends GetxController {
     _googleSignIn.signIn().then((userData) async {
       if(userData!=null){
         LogUtils.debugLog("userData==="+userData.toString());
-        _loginSuccess(userData);
-       // await callApi(userData);
+        // _loginSuccess(userData);
+       await callApi(userData);
 
       }else{
         isLoading.value=false;
@@ -75,18 +76,19 @@ class LoginController extends GetxController {
   Future<void> callApi(GoogleSignInAccount userData) async {
     // showLoadingDialog();
     try {
-      ApiResponse response=await authanticationRepo.verifyEmail(userData.email);
+      ApiResponse response=await authanticationRepo.createEmail(userData.displayName ??"",userData.email,"");
 
       switch (response.status) {
         case Status.SUCCESS:
-          var responseData = json.decode(response.data);
+          // var responseData = json.decode(response.data);
+          LoginSuccess loginSuccess=LoginSuccess.fromJson(response.data);
           // Navigator.pop(Get.overlayContext!);//pop progress
           _loginSuccess(userData);
 
           break;
         case Status.ERROR:
           isLoading.value=false;
-          AppUtils.getToast(message: response.data.toString(), isError: true);
+          // AppUtils.getToast(message: response.data.toString(), isError: true);
           LogUtils.error(response.data.toString());
           AppUtils.handleApiError(response);
           // Navigator.pop(Get.overlayContext!);
